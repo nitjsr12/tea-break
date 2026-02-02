@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tea Break? ☕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --tea-brown: #8b6914;
+      --tea-dark: #6b4e0f;
+      --cream: #f5f0e6;
+      --mint: #c8e6c9;
+      --gradient-hero: linear-gradient(135deg, #d4a574 0%, #f5e6d3 50%, #e8d5b7 100%);
+      --gradient-card: linear-gradient(145deg, #fff8f0 0%, #f5ebe0 50%, #ede0d4 100%);
+      --shadow-soft: 0 8px 32px rgba(139, 105, 20, 0.2);
+      --shadow-glow: 0 0 30px rgba(212, 165, 116, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--gradient-hero);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #4a3c28;
+    }
+
+    .hearts-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart-float {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.4;
+      animation: floatHeart 8s ease-in-out infinite;
+    }
+
+    .heart-float:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+    .heart-float:nth-child(2) { left: 80%; top: 15%; animation-delay: 1s; }
+    .heart-float:nth-child(3) { left: 25%; top: 60%; animation-delay: 2s; }
+    .heart-float:nth-child(4) { left: 70%; top: 70%; animation-delay: 0.5s; }
+    .heart-float:nth-child(5) { left: 50%; top: 40%; animation-delay: 3s; }
+    .heart-float:nth-child(6) { left: 15%; top: 85%; animation-delay: 1.5s; }
+    .heart-float:nth-child(7) { left: 90%; top: 45%; animation-delay: 2.5s; }
+    .heart-float:nth-child(8) { left: 40%; top: 10%; animation-delay: 0.8s; }
+    .heart-float:nth-child(9) { left: 60%; top: 90%; animation-delay: 2s; }
+
+    @keyframes floatHeart {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+      50% { transform: translateY(-20px) rotate(10deg); opacity: 0.7; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 0 2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700;
+      color: var(--tea-dark);
+      text-shadow: 2px 2px 0 rgba(255,255,255,0.8);
+      animation: bounceIn 1s ease-out;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .hero .subtext {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #5c4a38;
+      min-height: 2.5rem;
+    }
+
+    .hero .subtext .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: var(--tea-brown);
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .warning-caption {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.7);
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      color: #6b5a48;
+      box-shadow: var(--shadow-soft);
+      animation: floatCaption 3s ease-in-out infinite;
+    }
+
+    @keyframes floatCaption {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .love-messages {
+      background: var(--gradient-card);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-soft);
+      border: 2px solid rgba(255,255,255,0.8);
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .love-messages p {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      font-weight: 600;
+      color: #5c4a38;
+      text-align: center;
+      transition: opacity 0.4s ease;
+    }
+
+    .valentine-card {
+      background: var(--gradient-card);
+      border-radius: 2rem;
+      padding: 2.5rem;
+      margin: 2.5rem 0;
+      box-shadow: var(--shadow-soft), 0 0 0 3px rgba(255,255,255,0.5);
+      border: 2px solid rgba(212, 165, 116, 0.6);
+      position: relative;
+    }
+
+    .valentine-card h2 {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 700;
+      color: var(--tea-dark);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .buttons-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+      position: relative;
+    }
+
+    .btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #c8a060, #8b6914);
+      color: white;
+      box-shadow: 0 4px 20px rgba(139, 105, 20, 0.4);
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.08);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .btn-yes:active {
+      transform: scale(0.98);
+    }
+
+    .btn-no {
+      background: linear-gradient(135deg, #b0b0b0, #888);
+      color: #fff;
+      font-size: 0.95rem;
+      padding: 0.7rem 1.2rem;
+      position: absolute;
+      transition: left 0.25s ease, top 0.25s ease, transform 0.15s ease;
+    }
+
+    .btn-no:hover {
+      transform: scale(0.95);
+    }
+
+    .no-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background: #333;
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 10;
+    }
+
+    .btn-no-wrapper:hover .no-tooltip,
+    .btn-no-wrapper.show-tooltip .no-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-12px);
+    }
+
+    .btn-no-wrapper {
+      position: absolute;
+      display: inline-block;
+      transition: left 0.25s ease, top 0.25s ease;
+    }
+
+    .hug-section {
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .hug-section p {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 600;
+      color: #6b5a48;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #5c4a38;
+      opacity: 0.9;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--gradient-card);
+      border-radius: 2rem;
+      padding: 2.5rem;
+      max-width: 90%;
+      width: 380px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2), var(--shadow-glow);
+      border: 3px solid rgba(212, 165, 116, 0.8);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.show .modal {
+      transform: scale(1);
+    }
+
+    .modal h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 2rem;
+      color: var(--tea-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal p {
+      font-size: 1.1rem;
+      color: #5c4a38;
+      line-height: 1.5;
+    }
+
+    .modal .hearts-burst {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+      animation: pulse 0.6s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-bg" aria-hidden="true">
+    <span class="heart-float">☕</span>
+    <span class="heart-float">🫖</span>
+    <span class="heart-float">☕</span>
+    <span class="heart-float">🍵</span>
+    <span class="heart-float">☕</span>
+    <span class="heart-float">🫖</span>
+    <span class="heart-float">☕</span>
+    <span class="heart-float">🍵</span>
+    <span class="heart-float">☕</span>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Hey! ☕</h1>
+      <p class="subtext"><span id="typed-text"></span><span class="cursor" id="typed-cursor"></span></p>
+      <span class="warning-caption">Warning: Tea cravings ahead 🚨</span>
+    </section>
+
+    <section class="love-messages">
+      <p id="rotating-message">My brain runs on tea and questionable decisions. 😌</p>
+    </section>
+
+    <section class="valentine-card">
+      <h2>Can we take a tea break? ☕</h2>
+      <div class="buttons-wrap">
+        <button type="button" class="btn btn-yes" id="btn-yes">Yes ☕</button>
+        <div class="btn-no-wrapper" id="no-wrapper">
+          <span class="no-tooltip" id="no-tooltip">Nice try 😜</span>
+          <button type="button" class="btn btn-no" id="btn-no">No 😏</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="hug-section">
+      <p>Tea first, then we conquer the world. 😌☕</p>
+    </section>
+
+    <footer>
+      Made with ☕, sarcasm, and zero guilt — Ravi
+    </footer>
+  </div>
+
+  <audio id="bg-music" preload="auto" loop></audio>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="hearts-burst">☕🫖☕ Yay! ☕</div>
+      <h3>Tea time approved! 😄</h3>
+      <p>You're officially on break. Go grab that cuppa! ☕</p>
+    </div>
+  </div>
+
+  <script>
+    const subtext = "I need a tea break… and so do you. Maybe. 😏";
+    const typedEl = document.getElementById('typed-text');
+    const cursorEl = document.getElementById('typed-cursor');
+
+    function typeWriter(text, i, cb) {
+      if (i < text.length) {
+        typedEl.textContent += text[i];
+        setTimeout(() => typeWriter(text, i + 1, cb), 80);
+      } else {
+        setTimeout(cb, 2500);
+      }
+    }
+
+    function blinkCursor() {
+      cursorEl.style.opacity = cursorEl.style.opacity === '0' ? '1' : '0';
+      setTimeout(blinkCursor, 500);
+    }
+
+    function typeLoop() {
+      typedEl.textContent = '';
+      typeWriter(subtext, 0, () => {
+        setTimeout(typeLoop, 1500);
+      });
+    }
+
+    setTimeout(() => typeLoop(), 600);
+    setTimeout(blinkCursor, 600);
+
+    const messages = [
+      "My brain runs on tea and questionable decisions. 😌",
+      "Tea is the answer. What was the question again? ☕",
+      "Life is brew-tea-ful with a cuppa. 🫖",
+      "I'm not procrastinating. I'm tea-loading. 😏"
+    ];
+    let msgIndex = 0;
+    const msgEl = document.getElementById('rotating-message');
+
+    setInterval(() => {
+      msgEl.style.opacity = '0';
+      setTimeout(() => {
+        msgIndex = (msgIndex + 1) % messages.length;
+        msgEl.textContent = messages[msgIndex];
+        msgEl.style.opacity = '1';
+      }, 400);
+    }, 2500);
+
+    const noWrapper = document.getElementById('no-wrapper');
+    const btnNo = document.getElementById('btn-no');
+    const tooltipEl = document.getElementById('no-tooltip');
+    const wrapEl = document.querySelector('.buttons-wrap');
+
+    const tooltips = [
+      "Nice try 😜",
+      "Oops! Missed me 😂",
+      "No option not available 🚫",
+      "Nope, try again! 😏",
+      "Still no. Literally. 🚫",
+      "The button has left the chat 💨",
+      "Catch me if you can! 🏃"
+    ];
+    let tooltipIndex = 0;
+
+    function getRandomPosition() {
+      const rect = wrapEl.getBoundingClientRect();
+      const maxX = rect.width - 90;
+      const maxY = rect.height - 44;
+      const x = 20 + Math.random() * Math.max(0, maxX - 20);
+      const y = 10 + Math.random() * Math.max(0, maxY - 10);
+      return { x, y };
+    }
+
+    function moveNoButton() {
+      const { x, y } = getRandomPosition();
+      noWrapper.style.left = x + 'px';
+      noWrapper.style.top = y + 'px';
+      noWrapper.style.transform = 'translate(-50%, -50%)';
+      tooltipIndex = (tooltipIndex + 1) % tooltips.length;
+      tooltipEl.textContent = tooltips[tooltipIndex];
+      noWrapper.classList.add('show-tooltip');
+      setTimeout(() => noWrapper.classList.remove('show-tooltip'), 800);
+    }
+
+    btnNo.addEventListener('mouseenter', moveNoButton);
+    btnNo.addEventListener('click', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    noWrapper.style.left = '50%';
+    noWrapper.style.top = '50%';
+    noWrapper.style.transform = 'translate(80px, -50%)';
+
+    const btnYes = document.getElementById('btn-yes');
+    const modal = document.getElementById('modal');
+
+    function fireConfetti() {
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+      const colors = ['#c8a060', '#8b6914', '#d4a574', '#f5e6d3'];
+
+      (function frame() {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      }());
+    }
+
+    function burst() {
+      confetti({
+        particleCount: 80,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#c8a060', '#8b6914', '#f5e6d3']
+      });
+    }
+
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.src = 'romantic-music.mp3';
+
+    btnYes.addEventListener('click', () => {
+      fireConfetti();
+      burst();
+      modal.classList.add('show');
+      setTimeout(fireConfetti, 500);
+      setTimeout(burst, 1000);
+      bgMusic.play().catch(() => {});
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('show');
+    });
+  </script>
+</body>
+</html>
